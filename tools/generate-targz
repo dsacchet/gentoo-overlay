@@ -1,0 +1,14 @@
+#!/bin/bash
+
+DESTDIR=/var/www/www.ouba.org/htdocs/opensource/distfiles
+SVNPATH=/var/svn/repos
+MODULE=/trunk/local-portage
+
+cd /tmp
+rm -rf local-portage
+svn export -r HEAD file://"${SVNPATH}${MODULE}" local-portage
+cd local-portage
+make
+cd portage-final
+tar -zcvf "${DESTDIR}"/local-portage-`date +%Y%m%d`.tar.gz *
+rm -rf /tmp/local-portage

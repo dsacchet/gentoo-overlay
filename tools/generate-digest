@@ -1,0 +1,14 @@
+#!/bin/bash
+
+export PORTDIR_OVERLAY=`pwd`/portage-final
+
+for i in `ls --color=none portage-final`;
+do
+	for j in `ls --color=none portage-final/$i`;
+	do
+		for k in `ls --color=none portage-final/$i/$j/*.ebuild`;
+		do
+			ebuild $k digest;
+		done;
+	done;
+done;

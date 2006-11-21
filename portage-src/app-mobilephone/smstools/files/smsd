@@ -1,0 +1,16 @@
+#!/sbin/runscript
+# Copyright 1999-2004 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Header: /var/cvsroot/gentoo-x86/net-print/cups/files/cupsd.rc6,v 1.15 2004/07/15 00:21:38 agriffis Exp $
+
+start() {
+        ebegin "Starting smsd"
+        start-stop-daemon --start --quiet --exec /usr/sbin/smsd -- -c/etc/smstools/smsd.conf &
+        eend $?
+}
+
+stop() {
+        ebegin "Stopping smsd"
+        start-stop-daemon --stop --quiet --exec /usr/sbin/smsd -- -c/etc/smstools/smsd.conf &
+        eend $?
+}
