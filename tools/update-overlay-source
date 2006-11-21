@@ -1,14 +1,19 @@
 #!/bin/bash
 
-DESTDIR=/var/www/www.ouba.org/htdocs/opensource/distfiles
+DESTDIR=/var/www/www.ouba.org/htdocs/opensource/portage
 SVNPATH=/var/svn/repos
-MODULE=/trunk/local-portage
+MODULE=/trunk/ouba-overlay
 
 cd /tmp
-rm -rf local-portage
-svn export -r HEAD file://"${SVNPATH}${MODULE}" local-portage
-cd local-portage
+rm -rf ouba-overlay
+svn export -r HEAD file://"${SVNPATH}${MODULE}" ouba-overlay
+cd ouba-overlay
 make
 cd portage-final
-tar -zcvf "${DESTDIR}"/local-portage-`date +%Y%m%d`.tar.gz *
-rm -rf /tmp/local-portage
+rm -rf "${DESTDIR}"/*
+mv * "${DESTDIR}"
+cd /tmp
+rm -rf ouba-overlay
+chown -R root:root "${DESTDIR}"
+find "${DESTDIR}" -type d -exec chmod 755 {} \;
+find "${DESTDIR}" -type f -exec chmod 644 {} \;
