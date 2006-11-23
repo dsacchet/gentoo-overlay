@@ -40,6 +40,7 @@ src_install() {
 	doexe ${FILESDIR}/smsd
 	dosbin smsd
 	dobin ../scripts/sendsms
+	dobin ${FILESDIR}/email2sms
 
 	insinto /etc/smstools
 	newins ${FILESDIR}/smsd.conf smsd.conf

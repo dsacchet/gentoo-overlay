@@ -5,12 +5,12 @@
 
 start() {
         ebegin "Starting smsd"
-        start-stop-daemon --start --quiet --exec /usr/sbin/smsd -- -c/etc/smstools/smsd.conf &
+        start-stop-daemon --start -c sms:sms --quiet --exec /usr/sbin/smsd -- -c/etc/smstools/smsd.conf &
         eend $?
 }
 
 stop() {
         ebegin "Stopping smsd"
-        start-stop-daemon --stop --quiet --exec /usr/sbin/smsd -- -c/etc/smstools/smsd.conf &
+        start-stop-daemon --stop -c sms:sms --quiet --exec /usr/sbin/smsd -- -c/etc/smstools/smsd.conf &
         eend $?
 }
