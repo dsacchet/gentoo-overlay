@@ -19,33 +19,35 @@ src_compile() {
 	emake -s || die "emake failed"
 }
 
-src_install() {
+pkg_preinst() {
 	enewgroup sms
 	enewuser sms -1 /bin/false /dev/null sms
-	pkg_preinst
+}
+
+src_install() {
 	dodir /etc/smstools
 	touch ${D}/etc/smstools/whitelist
 	touch ${D}/etc/smstools/blacklist
-	dodir /var/spool/sms
-	touch ${D}/var/spool/sms/.keep
-	dodir /var/spool/sms/incoming
-	touch ${D}/var/spool/sms/incoming/.keep
-	dodir /var/spool/sms/outgoing
-	touch ${D}/var/spool/sms/outgoing/.keep
-	dodir /var/spool/sms/checked
-	touch ${D}/var/spool/sms/checked/.keep
-	dodir /var/spool/sms/failed
-	touch ${D}/var/spool/sms/failed/.keep
-	dodir /var/spool/sms/sent
-	touch ${D}/var/spool/sms/sent/.keep
-	fowners sms:sms /var/spool/sms
-	fowners sms:sms /var/spool/sms/incoming
-	fowners sms:sms /var/spool/sms/outgoing
-	fowners sms:sms /var/spool/sms/checked
+
+	keepdir /var/spool/sms
+	keepdir /var/spool/sms/incoming
+	keepdir /var/spool/sms/outgoing
+	keepdir /var/spool/sms/checked
+	keepdir /var/spool/sms/failed
+	keepdir /var/spool/sms/sent
+
 	exeinto /etc/init.d
 	doexe ${FILESDIR}/smsd
 	dosbin bin/smsd
 	dobin scripts/sendsms
+
 	insinto /etc/smstools
 	newins ${FILESDIR}/smsd.conf smsd.conf
+}
+
+pkg_postinst() {
+	fowners sms:sms /var/spool/sms
+	fowners sms:sms /var/spool/sms/incoming
+	fowners sms:sms /var/spool/sms/outgoing
+	fowners sms:sms /var/spool/sms/checked
 }
