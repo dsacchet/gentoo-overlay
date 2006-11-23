@@ -1,0 +1,93 @@
+#!/bin/bash
+#
+# Convert a mail passed from a pipe to a formatted sms
+# id, the destination phone number on the first line
+# then a blank line, and then 160 characters
+
+# Configuration
+SMS_DOMAIN="sms.kika.loc"
+OUTGOING_DIR=/var/spool/sms/outgoing
+
+# Initialization
+TO=`echo ${1} | sed "s/\([0-9]*\)@${SMS_DOMAIN}/To: \1/"`
+SMS_FILE=`mktemp ${OUTGOING_DIR}/send_XXXXXX`
+
+# Header of sms files
+echo $TO > ${SMS_FILE}
+echo >> ${SMS_FILE}
+
+# Number of character already used
+cara=0
+
+# Is the email header entirely read
+body=0
+
+# Treatment loop
+while read i
+do
+	# If we are already in the body and the
+	# number of characters is less than 160
+	if [ $body -eq 1 -a $cara -le 160 ]
+	then
+		oldcara=$cara
+		cara=$(($cara+`echo $i | wc -c`))
+		
+		# If the number of resultant characters
+		# are greater than 160, then a truncated
+		# the current line
+		if [ $cara -gt 160 ]
+		then
+			caratoget160=$((160-$oldcara-1))
+			i=${i:0:$caratoget160}
+		fi
+		
+		# We put the current line on the outgoing
+		# sms file
+		echo $i >> ${SMS_FILE}
+	fi
+	
+	# The separation between the email headers
+	# and the email body are a blank line, so
+	# as soon as we detect a blank line, we are
+	# in the body
+	if [ $body -eq 0 -a "$i" = "" ]
+	then
+		body=1
+		#If we catch the subject, we will add it
+		if [ x"$SUBJECT" != x ]
+		then
+			echo -n ${SUBJECT} >> ${SMS_FILE}
+			echo >> ${SMS_FILE}
+			cara=$(($cara+`echo ${SUBJECT} | wc -c`+1))
+		fi
+		#If we catch the reply-to, we will add it
+		if [ x"$REPLYTO" != x ]
+		then
+			echo -n ${REPLYTO} >> ${SMS_FILE}
+			echo >> ${SMS_FILE}
+			cara=$(($cara+`echo ${REPLYTO} | wc -c`+1))
+		fi
+	fi
+	# Get the reply-to of the mail truncated to
+	# 20 characters
+	if [ $body -eq 0 -a "${i:0:9}" = "Reply-To:" ]
+	then
+		if [ `echo ${i:10} | wc -c` -le 21 ]
+		then
+			REPLYTO="R:${i}"
+		else
+			REPLYTO="R:${i:10:20}_"
+		fi
+	fi
+	# Get the subject of the mail truncated to
+	# 20 characters
+	if [ $body -eq 0 -a "${i:0:8}" = "Subject:" ]
+	then
+		if [ `echo ${i:9} | wc -c` -le 21 ]
+		then
+			SUBJECT="S:${i}"
+		else
+			SUBJECT="S:${i:9:20}_"
+		fi
+	fi
+done
