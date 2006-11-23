@@ -21,7 +21,7 @@ src_compile() {
 
 pkg_preinst() {
 	enewgroup sms
-	enewuser sms -1 /bin/false /dev/null sms
+	enewuser sms -1 -1 /dev/null sms
 }
 
 src_install() {
