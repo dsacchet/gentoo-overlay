@@ -38,7 +38,7 @@ src_install() {
 
 	exeinto /etc/init.d
 	doexe ${FILESDIR}/smsd
-	dosbin bin/smsd
+	dosbin src/smsd
 	dobin scripts/sendsms
 
 	insinto /etc/smstools
