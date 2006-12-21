@@ -10,7 +10,7 @@ SRC_URI="http://www.ouba.org/opensource/distfiles/${P}.tar.gz"
 LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="x86"
-IUSE="ncurses"
+IUSE=""
 DEPEND="sys-libs/ncurses dev-libs/cdk"
 RDEPEND="${DEPEND}"
 
