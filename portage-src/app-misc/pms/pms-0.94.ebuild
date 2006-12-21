@@ -11,7 +11,7 @@ LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="x86"
 IUSE=""
-DEPEND="sys-libs/ncurses dev-libs/cdk"
+DEPEND="sys-libs/ncurses <dev-libs/cdk-5"
 RDEPEND="${DEPEND}"
 
 src_compile() {
