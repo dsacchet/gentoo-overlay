@@ -9,7 +9,7 @@ KEYWORDS="x86 amd64"
 IUSE=""
 DEPEND="sys-devel/gcc"
 RDEPEND=""
-SLOT=0
+SLOT="0"
 
 src_compile() {
 	gcc ${FILESDIR}/pdate.c -o ${T}/pdate
