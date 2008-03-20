@@ -2,6 +2,11 @@
 # Copyright 1999-2005 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+*pdate-1.0-r0 (20 Mar 2008)
+
+  20 Mar 2008; Denis Sacchet <ouba@ouba.org> :
+  Add slot information into the ebuild
+
 *pdate-1.0 (02 Dec 2005)
 
   02 Dec 2005; Denis Sacchet <ouba@ouba.org> :
